@@ -118,6 +118,8 @@ typedef ptrdiff_t ssize_t;
 #elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) \
     || defined(__FreeBSD_kernel__)
 #    define UHD_PLATFORM_BSD
+#elif defined(sun) || defined(_sun)
+#    define UHD_PLATFORM_SUNOS
 #endif
 
 // Define 'stringize' preprocessor macros. The stringize macro, XSTR, takes
