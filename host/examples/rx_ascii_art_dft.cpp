@@ -9,7 +9,11 @@
 #include <uhd/usrp/multi_usrp.hpp>
 #include <uhd/utils/safe_main.hpp>
 #include <uhd/utils/thread.hpp>
+#ifndef UHD_PLATFORM_SUNOS
 #include <curses.h>
+#else
+#include <ncurses/ncurses.h>
+#endif
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
 #include <chrono>

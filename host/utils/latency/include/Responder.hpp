@@ -9,7 +9,11 @@
 #define RESPONDER_H
 
 #include <uhd/usrp/multi_usrp.hpp>
+#ifndef UHD_PLATFORM_SUNOS
 #include <curses.h>
+#else
+#include <ncurses/ncurses.h>
+#endif
 #include <stdint.h>
 #include <ctime>
 #include <map>
