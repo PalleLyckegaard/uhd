@@ -14,6 +14,6 @@ extern int   optind;
 extern int   optopt;
 extern char* optarg;
 
-int getopt(int argc, char **argv, char *opts);
+int getopt(int argc, char * const argv[], const char *opts);
 
 #endif /* _GETOPT_H_ */

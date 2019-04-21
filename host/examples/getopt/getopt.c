@@ -23,7 +23,7 @@ int optopt;
 char *optarg;
 
 int
-getopt(int argc, char **argv, char *opts)
+getopt(int argc, char * const argv[], const char *opts)
 {
     static int sp;
     int c;
