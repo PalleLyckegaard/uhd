@@ -44,7 +44,7 @@ static const size_t DEFAULT_NUM_FRAMES      = 32;
 //radio 0.5MiB minus 8 packets worth of buffering to ensure
 //that the FIFO does not overflow
 static const size_t DEFAULT_SEND_BUFF_SIZE  = 500*1024;
-#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD)
+#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD) || defined(UHD_PLATFORM_SUNOS)
 static const size_t DEFAULT_RECV_BUFF_SIZE  = 0x100000; //1Mib
 #elif defined(UHD_PLATFORM_LINUX) || defined(UHD_PLATFORM_WIN32)
 static const size_t DEFAULT_RECV_BUFF_SIZE  = 0x2000000;//32MiB
