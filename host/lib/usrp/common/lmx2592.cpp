@@ -95,12 +95,12 @@ inline bool abs_less_than_compare(const double a, const double b)
     return std::abs(a) < std::abs(b);
 }
 
-typedef std::pair<double, intermediate_frequency_t> offset_t;
+typedef std::pair<double, intermediate_frequency_t> offset_freq_t;
 
-// comparator that uses absolute value on the first value of an offset_t
+// comparator that uses absolute value on the first value of an offset_freq_t
 inline bool offset_abs_less_than_compare(
-    const offset_t a,
-    const offset_t b)
+    const offset_freq_t a,
+    const offset_freq_t b)
 {
     return std::abs(a.first) < std::abs(b.first);
 }
@@ -611,7 +611,7 @@ private: // Members
     // 3. Reference to Fvco spur
     // 4. Reference to Flo spur
     // A negative offset indicates the closest spur is at a lower frequency
-    offset_t _get_min_offset_frequency(
+    offset_freq_t _get_min_offset_frequency(
         const uint16_t N,
         const uint32_t fnum,
         const uint32_t fden,
@@ -631,16 +631,16 @@ private: // Members
         // in order to calculate the necessary frequency shift
 
         // Integer Boundary:
-        const offset_t ib_spur = { _get_closest_spur_offset(frf_in, pfd_freq), FRF_IN };
+        const offset_freq_t ib_spur = { _get_closest_spur_offset(frf_in, pfd_freq), FRF_IN };
 
         // PFD Offset Spur:
-        const offset_t pfd_offset_spur = { _get_closest_spur_offset(fvco, pfd_freq), FVCO };
+        const offset_freq_t pfd_offset_spur = { _get_closest_spur_offset(fvco, pfd_freq), FVCO };
 
         // Reference to Fvco Spur:
-        const offset_t fvco_spur = { _get_closest_spur_offset(fvco, fref), FVCO };
+        const offset_freq_t fvco_spur = { _get_closest_spur_offset(fvco, fref), FVCO };
 
         // Reference to F_lo Spur:
-        const offset_t flo_spur = { _get_closest_spur_offset(flo, fref), FLO };
+        const offset_freq_t flo_spur = { _get_closest_spur_offset(flo, fref), FLO };
 
         // use min with special comparator for minimal absolute value
         return std::min({
