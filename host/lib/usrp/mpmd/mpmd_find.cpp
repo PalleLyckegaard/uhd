@@ -166,8 +166,10 @@ device_addrs_t mpmd_find_with_bcast(const device_addr_t& hint)
         "MPMD FIND", "Broadcasting on all available interfaces to find MPM devices.");
     std::vector<std::future<device_addrs_t>> task_list;
     for (const auto& if_addr : transport::get_if_addrs()) {
+      if (if_addr.bcast.size()) {
         task_list.emplace_back(std::async(std::launch::async,
             [if_addr, hint]() { return mpmd_find_with_addr(if_addr.bcast, hint); }));
+      }
     }
     for (auto& task : task_list) {
         auto reply_addrs = task.get();

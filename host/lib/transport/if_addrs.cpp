@@ -28,6 +28,7 @@ std::vector<uhd::transport::if_addrs_t> uhd::transport::get_if_addrs(void)
     struct ifaddrs* ifap;
     if (getifaddrs(&ifap) == 0) {
         for (struct ifaddrs* iter = ifap; iter != nullptr; iter = iter->ifa_next) {
+	    bool broadcast = (iter->ifa_flags & IFF_BROADCAST) ? true : false;
             // ensure that the entries are valid
             if (iter->ifa_addr == nullptr)
                 continue;
@@ -35,26 +36,28 @@ std::vector<uhd::transport::if_addrs_t> uhd::transport::get_if_addrs(void)
                 continue;
             if (iter->ifa_netmask->sa_family != AF_INET)
                 continue;
-            if (iter->ifa_broadaddr->sa_family != AF_INET)
+            if (broadcast)
+	      if (iter->ifa_broadaddr->sa_family != AF_INET)
                 continue;
 
             // append a new set of interface addresses
             if_addrs_t if_addr;
             if_addr.inet  = sockaddr_to_ip_addr(iter->ifa_addr).to_string();
             if_addr.mask  = sockaddr_to_ip_addr(iter->ifa_netmask).to_string();
-            if_addr.bcast = sockaddr_to_ip_addr(iter->ifa_broadaddr).to_string();
-
+	    if (broadcast)
+	      if_addr.bcast = sockaddr_to_ip_addr(iter->ifa_broadaddr).to_string();
+	      
             // correct the bcast address when its same as the gateway
-            if (if_addr.inet == if_addr.bcast
-                or sockaddr_to_ip_addr(iter->ifa_broadaddr)
-                       == boost::asio::ip::address_v4(0)) {
+            if (broadcast)
+	      if (if_addr.inet == if_addr.bcast or
+		  sockaddr_to_ip_addr(iter->ifa_broadaddr) == boost::asio::ip::address_v4(0)) {
                 // manually calculate broadcast address
                 // https://svn.boost.org/trac/boost/ticket/5198
                 const uint32_t addr  = sockaddr_to_ip_addr(iter->ifa_addr).to_ulong();
                 const uint32_t mask  = sockaddr_to_ip_addr(iter->ifa_netmask).to_ulong();
                 const uint32_t bcast = (addr & mask) | ~mask;
                 if_addr.bcast        = boost::asio::ip::address_v4(bcast).to_string();
-            }
+	      }
 
             if_addrs.push_back(if_addr);
         }
