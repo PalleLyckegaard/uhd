@@ -231,7 +231,7 @@ public:
     // set size for internal socket buffer
     template <typename Opt> size_t resize_buff(size_t num_bytes)
     {
-#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD)
+#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD) || defined(UHD_PLATFORM_SUNOS)
         // limit buffer resize on macos or it will error
         num_bytes = std::min(num_bytes, MAX_BUFF_SIZE_ETH_MACOS);
 #endif
@@ -397,7 +397,7 @@ udp_zero_copy::sptr udp_zero_copy::make(const std::string& addr,
             xport_params.num_send_frames * MAX_ETHERNET_MTU);
     }
 
-#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD)
+#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD) || defined(UHD_PLATFORM_SUNOS)
     // limit default buffer size on macos to avoid the warning issued by
     // resize_buff_helper
     if (not hints.has_key("recv_buff_size")

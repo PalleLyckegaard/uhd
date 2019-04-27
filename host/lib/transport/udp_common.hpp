@@ -16,7 +16,7 @@ namespace uhd { namespace transport {
 // Jumbo frames can be up to 9600 bytes;
 static const size_t MAX_ETHERNET_MTU = 9600;
 
-#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD)
+#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD) || defined(UHD_PLATFORM_SUNOS)
 // MacOS limits socket buffer size to 1 Mib
 static const size_t MAX_BUFF_SIZE_ETH_MACOS = 0x100000; // 1Mib
 #endif
