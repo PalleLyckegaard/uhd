@@ -16,10 +16,14 @@ namespace uhd { namespace transport {
 // Jumbo frames can be up to 9600 bytes;
 static const size_t MAX_ETHERNET_MTU = 9600;
 
-#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD) || defined(UHD_PLATFORM_SUNOS)
+#if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD)
 // MacOS limits socket buffer size to 1 Mib
-static const size_t MAX_BUFF_SIZE_ETH_MACOS = 0x100000; // 1Mib
+static const size_t MAX_BUFF_SIZE_ETH = 0x100000; // 1Mib
+#elif defined(UHD_PLATFORM_SUNOS)
+// SunOS limits socket buffer size to 2 Mib (verification: 'ndd /dev/udp udp_max_buf')
+static const size_t MAX_BUFF_SIZE_ETH = 0x200000; // 2Mib
 #endif
+    
 
 typedef boost::shared_ptr<boost::asio::ip::udp::socket> socket_sptr;
 

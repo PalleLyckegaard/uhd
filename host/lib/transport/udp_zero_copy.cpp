@@ -233,7 +233,7 @@ public:
     {
 #if defined(UHD_PLATFORM_MACOS) || defined(UHD_PLATFORM_BSD) || defined(UHD_PLATFORM_SUNOS)
         // limit buffer resize on macos or it will error
-        num_bytes = std::min(num_bytes, MAX_BUFF_SIZE_ETH_MACOS);
+        num_bytes = std::min(num_bytes, MAX_BUFF_SIZE_ETH);
 #endif
         Opt option(num_bytes);
         _socket->set_option(option);
