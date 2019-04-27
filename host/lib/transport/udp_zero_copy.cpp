@@ -401,12 +401,12 @@ udp_zero_copy::sptr udp_zero_copy::make(const std::string& addr,
     // limit default buffer size on macos to avoid the warning issued by
     // resize_buff_helper
     if (not hints.has_key("recv_buff_size")
-        and xport_params.recv_buff_size > MAX_BUFF_SIZE_ETH_MACOS) {
-        xport_params.recv_buff_size = MAX_BUFF_SIZE_ETH_MACOS;
+        and xport_params.recv_buff_size > MAX_BUFF_SIZE_ETH) {
+        xport_params.recv_buff_size = MAX_BUFF_SIZE_ETH;
     }
     if (not hints.has_key("send_buff_size")
-        and xport_params.send_buff_size > MAX_BUFF_SIZE_ETH_MACOS) {
-        xport_params.send_buff_size = MAX_BUFF_SIZE_ETH_MACOS;
+        and xport_params.send_buff_size > MAX_BUFF_SIZE_ETH) {
+        xport_params.send_buff_size = MAX_BUFF_SIZE_ETH;
     }
 #endif
 
