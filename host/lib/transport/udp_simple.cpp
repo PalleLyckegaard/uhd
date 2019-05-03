@@ -14,14 +14,17 @@ using namespace uhd::transport;
 namespace asio = boost::asio;
 
 /***********************************************************************
- * UDP simple implementation: connected and broadcast
+ * UDP simple implementation: connected, broadcast and multicast
  **********************************************************************/
 class udp_simple_impl : public udp_simple
 {
 public:
     udp_simple_impl(
-        const std::string& addr, const std::string& port, bool bcast, bool connect)
-        : _connected(connect)
+		    const std::string& addr, const std::string& port,
+		    bool bcast, bool connect, bool mcast)
+      : _connected(connect),
+	_broadcast(bcast),
+	_multicast(mcast)
     {
         UHD_LOGGER_TRACE("UDP")
             << boost::format("Creating udp transport for %s %s") % addr % port;
@@ -37,7 +40,16 @@ public:
         _socket->open(asio::ip::udp::v4());
 
         // allow broadcasting
-        _socket->set_option(asio::socket_base::broadcast(bcast));
+	if (_broadcast)
+	    _socket->set_option(asio::socket_base::broadcast(true));
+
+	// join multicast address
+	if (_multicast) {
+	    if (connect)
+	      _socket->set_option(asio::ip::multicast::join_group(_send_endpoint.address()));
+	    else
+	      _socket->set_option(asio::ip::multicast::join_group(_recv_endpoint.address()));
+	}
 
         // connect the socket
         if (connect)
@@ -70,6 +82,8 @@ public:
 
 private:
     bool _connected;
+    bool _broadcast;
+    bool _multicast;
     asio::io_service _io_service;
     socket_sptr _socket;
     asio::ip::udp::endpoint _send_endpoint;
@@ -87,13 +101,22 @@ udp_simple::~udp_simple(void)
 udp_simple::sptr udp_simple::make_connected(
     const std::string& addr, const std::string& port)
 {
-    return sptr(new udp_simple_impl(addr, port, false, true /* no bcast, connect */));
+    return sptr(new udp_simple_impl(addr, port, false, true, false,
+				    /* no bcast, connect, no mcast */));
 }
 
 udp_simple::sptr udp_simple::make_broadcast(
     const std::string& addr, const std::string& port)
 {
-    return sptr(new udp_simple_impl(addr, port, true, false /* bcast, no connect */));
+    return sptr(new udp_simple_impl(addr, port, true, false, false,
+				  /* bcast, no connect, no mcast */)));
+}
+
+udp_simple::sptr udp_simple::make_multicast(
+    const std::string& addr, const std::string& port)
+{
+    return sptr(new udp_simple_impl(addr, port, false, false, true,
+				  /* no bcast, no connect, mcast */));
 }
 
 /***********************************************************************

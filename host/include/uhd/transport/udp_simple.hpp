@@ -57,6 +57,21 @@ public:
     static sptr make_broadcast(const std::string& addr, const std::string& port);
 
     /*!
+     * Make a new multicasting udp transport:
+     * This transport can send udp multicast datagrams
+     * and receive datagrams destined for multicast address.
+     * The primary usage for this transport will be to send data to a
+     * subset of receivers or receive data from a source.
+     *
+     * The address will be resolved, it can be a host name or ipv4.
+     * The port will be resolved, it can be a port type or number.
+     *
+     * \param addr a string representing the multicast address
+     * \param port a string representing the multicast port
+     */
+    static sptr make_multicast(const std::string& addr, const std::string& port);
+
+    /*!
      * Make a UART interface from a UDP transport.
      * \param udp the UDP transport object
      * \return a new UART interface
