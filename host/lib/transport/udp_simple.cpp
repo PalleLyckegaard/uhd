@@ -45,10 +45,7 @@ public:
 
 	// join multicast address
 	if (_multicast) {
-	    if (connect)
-	      _socket->set_option(asio::ip::multicast::join_group(_send_endpoint.address()));
-	    else
-	      _socket->set_option(asio::ip::multicast::join_group(_recv_endpoint.address()));
+	  _socket->set_option(asio::ip::multicast::join_group(_send_endpoint.address()));
 	}
 
         // connect the socket
@@ -101,22 +98,25 @@ udp_simple::~udp_simple(void)
 udp_simple::sptr udp_simple::make_connected(
     const std::string& addr, const std::string& port)
 {
-    return sptr(new udp_simple_impl(addr, port, false, true, false,
+    return sptr(new udp_simple_impl(addr, port,
+				    false, true, false
 				    /* no bcast, connect, no mcast */));
 }
 
 udp_simple::sptr udp_simple::make_broadcast(
     const std::string& addr, const std::string& port)
 {
-    return sptr(new udp_simple_impl(addr, port, true, false, false,
-				  /* bcast, no connect, no mcast */)));
+    return sptr(new udp_simple_impl(addr, port,
+				    true, false, false
+				    /* bcast, no connect, no mcast */));
 }
 
 udp_simple::sptr udp_simple::make_multicast(
     const std::string& addr, const std::string& port)
 {
-    return sptr(new udp_simple_impl(addr, port, false, false, true,
-				  /* no bcast, no connect, mcast */));
+    return sptr(new udp_simple_impl(addr, port,
+				    false, false, true
+				    /* no bcast, no connect, mcast */));
 }
 
 /***********************************************************************
