@@ -68,8 +68,11 @@ public:
      *
      * \param addr a string representing the multicast address
      * \param port a string representing the multicast port
+     * \param ifcaddr a string representing the unicast address 
+     *        that is assigned to the desired network interface
      */
-    static sptr make_multicast(const std::string& addr, const std::string& port);
+    static sptr make_multicast(const std::string& addr, const std::string& port,
+			       const std::string& ifcaddr);
 
     /*!
      * Make a UART interface from a UDP transport.
