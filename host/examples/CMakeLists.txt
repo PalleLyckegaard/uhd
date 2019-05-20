@@ -28,6 +28,8 @@ set(example_sources
     latency_test.cpp
     gpio.cpp
     sync_to_gps.cpp
+    udp_simple_mcast_tx.cpp
+    udp_simple_mcast_rx.cpp
 )
 
 if(ENABLE_RFNOC)
